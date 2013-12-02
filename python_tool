@@ -1,0 +1,6 @@
+def list_handle():
+	for i in list:
+		rows=list.count(i)
+		if rows>1:
+			while i in list:
+				list.remove(i);print i
