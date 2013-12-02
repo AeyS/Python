@@ -1,6 +1,6 @@
-def list_handle():
-	for i in list:
-		rows=list.count(i)
+def list_handle(list_name):
+	for i in list_name:
+		rows=list_name.count(i)
 		if rows>1:
-			while i in list:
-				list.remove(i);print i
+			while i in list_name:
+				list_name.remove(i);print i
