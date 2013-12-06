@@ -1,7 +1,127 @@
+```python
+# coding: utf-8
+import os
+import sys
+'''****************Private********************'''
+def __list_del_space_group(list):
+	f=__judge_file('d:/log.log')
+	nn=0
+	for x in list:
+		n=len(x)
+		if n<2:
+			print 'space'
+			pass
+		elif nn%2==0:
+			print nn
+			f.write(x.replace('\n','')+' ')
+		else:
+			f.write(x)
+		nn+=1
+	f.close()
+	key_list=open('d:/log.log').readlines()
+	return key_list
 
-def list_handle(list_name):
-	for i in list_name:
-		rows=list_name.count(i)
-		if rows>1:
-			while i in list_name:
-				list_name.remove(i);print i
+def __list_len_grouping(key_list):
+	nn=1
+	key_list_split=[]
+	for x in key_list:
+		n=len(x)
+		print n
+		if n>38:
+			print 'n>38'
+			key=x.split(' ')
+			key_list_split.append(key[0]+'\n')
+			key_list_split.append(key[1])
+		else:
+			key_list_split.append(x)
+		nn+=1
+	return key_list_split
+
+def __list_w(list,f):
+	for i in list:
+		f.write(i)
+		print i,
+
+def __judge_file(path):
+	if os.path.isfile(path):
+		os.remove(path)
+	f1=open(path,'a+')
+	return f1
+
+def __judge_name(list,judge_name):
+	#处理列表里的带数字关键词,judge pump have sum,if have jump out
+	# f1=__judge_file('D:/judge_list.txt')
+	flist=[]
+	nn=1
+	key = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+	for x in list:
+		n=len(x)
+		if n<3:
+			pass
+		elif judge_name in x:
+			for ii in key:
+				if ii in x:
+					print "%s have sum" % judge_name
+					m=1
+					break
+			else:
+				m=0
+
+			if m==0:
+				print "%s not sum" % judge_name
+				flist.append(x)
+		else:
+			flist.append(x)
+		nn+=1
+	return flist
+
+'''************************************'''
+
+def handle_list(list,model):
+	#先判断列表项是否合法
+	#然后合并两个关键词为一行，再计算每行长度是否违规，如是便拆分词组为单独一行
+	f1=__judge_file('D:/name_list.txt')
+	list=__judge_name(list,model)
+	print type(list)
+	for i in __list_len_grouping(__list_del_space_group(list)):
+		f1.write(i)
+	f1.close
+
+def list_del_list(list_a,list_b):
+	#提供价格列表，坐参考删除型号列表内容及几个列表自身的内容
+	f1=__judge_file('D:/del_list.txt')
+	f2=__judge_file('D:/handle_jg.txt')
+	sum_list=[]
+	jg_list=[]
+	n=0
+	for x in list_a:
+		if len(x) <3:
+			#以长度小于3来判断‘/’空白项的位置，并收集在sum_list里
+			sum_list.append(n)
+			print n,x,
+		else:
+			#这份价格列表就剔除了‘/’空白项
+			jg_list.append(x)
+		n+=1
+	n=0
+	for k in sum_list:
+		#这份型号列表就剔除了‘/’空白项，因为每删除一项，列表总数就减少1，所以删除一项的位置就得通过-n次来获取。
+		k=k-n
+		del list_b[k]
+		print 'del%s' % k
+		n+=1
+
+	__list_w(list_b,f1)
+	__list_w(jg_list,f2)
+
+
+	f1.close
+	f2.close
+
+f=open('D:/name.txt','r').readlines()
+#声称有效name.txt文件
+handle_list(f,'ih')
+#两个列表作对比需要读取时，使用以下处理
+# xh=open('D:/xh.txt','r').readlines()
+# list_del_list(f,xh)
+```
