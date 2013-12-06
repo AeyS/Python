@@ -118,7 +118,7 @@ def list_del_list(list_a,list_b):
 	f2.close
 
 f=open('D:/name.txt','r').readlines()
-#声称有效name.txt文件
+#生成有效name.txt文件
 handle_list(f,'ih')
 #两个列表作对比需要读取时，使用以下处理
 # xh=open('D:/xh.txt','r').readlines()
