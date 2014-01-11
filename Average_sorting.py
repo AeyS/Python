@@ -23,52 +23,53 @@ class Average_sorting(object):
         self.max_min_mark()
 
     def merger_group(self):
+        result = ''
         textlines = open(self.textdir,'r').readlines()
         for i in xrange(0,len(textlines)):
-            if i%2!=0:
-                if len(x)+len(textlines[i])>self.widenum:
-                    self.b_split.append(x)
+            if len(textlines[i])>self.widenum:
                     self.b_split.append(textlines[i])
-                else:
-                    self.success_list.append(x.replace('\n','')+' '+textlines[i])
             else:
-                x=textlines[i]
+                if len(result + textlines[i].replace('\n','') + ' ')>self.widenum:
+                    self.success_list.append(result+'\n')
+                    result = '' # Empty result
+                    result = textlines[i].replace('\n','') + ' ' # The remaining save to results
+                else:
+                    result = result + textlines[i].replace('\n','') + ' '
 
     def best_value(self):
         self.merger_group()
         self.max_min_mark()
-        if len(self.max_min) == 0:
-            raise ValueError("self.max_min list is Null,\nPlease check whether the file is empty!")
-        min_value=self.max_min.index(min(self.max_min))
-        while len(self.max_min) != 1:
-            print 'Every line widenum_list: %s' % self.max_min
-            max_value=self.max_min.index(max(self.max_min))
-            print 'list max_seat:  %s min_seat:  %s' % (max_value,min_value)
-            if len(self.b_split[max_value])+len(self.b_split[min_value])>self.widenum:
-                self.success_list.append(self.b_split[max_value])
-                self.del_list_value(self.max_min,self.b_split,max_value)
-                print "Single"
-            else:
-                textlines = self.b_split[max_value].replace('\n','')+' '+self.b_split[min_value]
-                self.del_list_value(self.max_min,self.b_split,max_value)
-                min_value=self.max_min.index(min(self.max_min))
-                self.del_list_value(self.max_min,self.b_split,min_value)
-                min_value=self.max_min.index(min(self.max_min))
-                print "Double"
-                while len(textlines)<self.widenum:
-                    print "textlines ++"
-                    if len(textlines)+len(self.b_split[min_value])>self.widenum:
-                        print 'textlines is "%d" near %d, break' % (len(textlines),self.widenum)
-                        break
-                    else:
-                        textlines = textlines+self.b_split[min_value]
-                        self.del_list_value(self.max_min,self.b_split,min_value)
-                        min_value=self.max_min.index(min(self.max_min))
-                self.success_list.append(textlines+'\n')
+        if len(self.max_min) != 0:
             min_value=self.max_min.index(min(self.max_min))
-        
-        print 'list max_seat:  %s min_seat:  %s' % (max_value,min_value)
-        self.success_list.append(self.b_split[0])
+            while len(self.max_min) != 1:
+                print 'Every line widenum_list: %s' % self.max_min
+                max_value=self.max_min.index(max(self.max_min))
+                print 'list max_seat:  %s min_seat:  %s' % (max_value,min_value)
+                if len(self.b_split[max_value])+len(self.b_split[min_value])>self.widenum:
+                    self.success_list.append(self.b_split[max_value])
+                    self.del_list_value(self.max_min,self.b_split,max_value)
+                    print "Single"
+                else:
+                    textlines = self.b_split[max_value].replace('\n','')+' '+self.b_split[min_value]
+                    self.del_list_value(self.max_min,self.b_split,max_value)
+                    min_value=self.max_min.index(min(self.max_min))
+                    self.del_list_value(self.max_min,self.b_split,min_value)
+                    min_value=self.max_min.index(min(self.max_min))
+                    print "Double"
+                    while len(textlines)<self.widenum:
+                        print "textlines ++"
+                        if len(textlines)+len(self.b_split[min_value])>self.widenum:
+                            print 'textlines is "%d" near %d, break' % (len(textlines),self.widenum)
+                            break
+                        else:
+                            textlines = textlines+self.b_split[min_value]
+                            self.del_list_value(self.max_min,self.b_split,min_value)
+                            min_value=self.max_min.index(min(self.max_min))
+                    self.success_list.append(textlines+'\n')
+                min_value=self.max_min.index(min(self.max_min))
+            
+            print 'list end:  %d ' % len(self.b_split[0])
+            self.success_list.append(self.b_split[0])
         return self.success_list
 
 
