@@ -37,7 +37,7 @@ class Average_sorting(object):
         self.merger_group()
         self.max_min_mark()
         if len(self.max_min) == 0:
-            print "self.max_min is Null"
+            raise ValueError("self.max_min list is Null,\nPlease check whether the file is empty!")
         min_value=self.max_min.index(min(self.max_min))
         while len(self.max_min) != 1:
             print 'Every line widenum_list: %s' % self.max_min
@@ -72,4 +72,4 @@ def main(widenum, textdir):
 
 if __name__ == '__main__':
     textdir = 'd:/name.txt'
-    main(27, textdir)
+    main(35, textdir)
