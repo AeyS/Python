@@ -8,9 +8,10 @@ class Average_sorting(object):
         self.textdir = textdir
         self.success_list=[] #Meet the requirements of the combined group
         self.b_split=[]
+        self.max_min=[]  #Max ad min volue save var;[function_name : max_min_mark]
     
     def max_min_mark(self):
-        self.max_min=[]  #Max ad min volue save var;[function_name : max_min_mark]
+        self.max_min=[]
         for i in self.b_split:
             length=len(i)
             self.max_min.append(length)
@@ -48,11 +49,22 @@ class Average_sorting(object):
                 self.del_list_value(self.max_min,self.b_split,max_value)
                 print "Single"
             else:
-                self.success_list.append(self.b_split[max_value].replace('\n','')+' '+self.b_split[min_value]+'\n')
+                textlines = self.b_split[max_value].replace('\n','')+' '+self.b_split[min_value]
                 self.del_list_value(self.max_min,self.b_split,max_value)
                 min_value=self.max_min.index(min(self.max_min))
                 self.del_list_value(self.max_min,self.b_split,min_value)
+                min_value=self.max_min.index(min(self.max_min))
                 print "Double"
+                while len(textlines)<self.widenum:
+                    print "textlines ++"
+                    if len(textlines)+len(self.b_split[min_value])>self.widenum:
+                        print 'textlines is "%d" near %d, break' % (len(textlines),self.widenum)
+                        break
+                    else:
+                        textlines = textlines+self.b_split[min_value]
+                        self.del_list_value(self.max_min,self.b_split,min_value)
+                        min_value=self.max_min.index(min(self.max_min))
+                self.success_list.append(textlines+'\n')
             min_value=self.max_min.index(min(self.max_min))
         
         print 'list max_seat:  %s min_seat:  %s' % (max_value,min_value)
