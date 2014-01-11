@@ -1,52 +1,75 @@
 # coding: utf-8
-import rw
 
-success_list=[] #Meet the requirements of the combined group
+class Average_sorting(object):
+    """docstring for Average_sorting"""
+    def __init__(self, widenum, textdir):
+        super(Average_sorting, self).__init__()
+        self.widenum = int(widenum)
+        self.textdir = textdir
+        self.success_list=[] #Meet the requirements of the combined group
+        self.b_split=[]
     
-def max_min_mark(var):
-    max_min=[]  #Max ad min volue save var;[function_name : max_min_mark]
-    for i in var:
-        length=len(i)
-        max_min.append(length)
-    return max_min
+    def max_min_mark(self):
+        self.max_min=[]  #Max ad min volue save var;[function_name : max_min_mark]
+        for i in self.b_split:
+            length=len(i)
+            self.max_min.append(length)
 
+    def del_list_value(self,list1,list2,n):
+        del list1[n]
+        del list2[n]
+        #Each time run get max_min
+        self.max_min_mark()
 
-def merger_group(textdir):
-    textlines = open(textdir,'r').readlines()
-    b_split=[]
-    for i in xrange(0,len(textlines)):
-        if i%2!=0:
-            if len(x)+len(textlines[i])>35:
-                b_split.append(x)
-                b_split.append(textlines[i])
+    def merger_group(self):
+        textlines = open(self.textdir,'r').readlines()
+        for i in xrange(0,len(textlines)):
+            if i%2!=0:
+                if len(x)+len(textlines[i])>self.widenum:
+                    self.b_split.append(x)
+                    self.b_split.append(textlines[i])
+                else:
+                    self.success_list.append(x.replace('\n','')+' '+textlines[i])
             else:
-                success_list.append(x.replace('\n','')+' '+textlines[i])
-        else:
-            x=textlines[i]
-    return b_split
+                x=textlines[i]
 
-def best_value(b_split):
-    max_min=max_min_mark(b_split)
-    min_value_location=max_min.index(min(max_min))
-    while min_value_location:
-        max_value_location=max_min.index(max(max_min))
-        if max_min[max_value_location]+max_min[min_value_location]>35:
-            success_list.append(b_split[max_value_location])
-            success_list.append(b_split[max_value_location])
-            max_min[max_value_location]=None
-        else:
-            success_list.append(b_split[max_value_location].replace('\n','')+' '+b_split[min_value_location])
-            max_min[max_value_location]=None
-            max_min[min_value_location]=None
-            min_value_location=max_min.index(min(max_min))
-
-def main(textdir):
-    path=raw_input('save_filename:')
-    best_value(merger_group(textdir))
-    rw.handle(success_list,path)
+    def best_value(self):
+        self.merger_group()
+        self.max_min_mark()
+        if len(self.max_min) == 0:
+            print "self.max_min is Null"
+        min_value=self.max_min.index(min(self.max_min))
+        while len(self.max_min) != 1:
+            print 'Every line widenum_list: %s' % self.max_min
+            max_value=self.max_min.index(max(self.max_min))
+            print 'list max_seat:  %s min_seat:  %s' % (max_value,min_value)
+            if len(self.b_split[max_value])+len(self.b_split[min_value])>self.widenum:
+                self.success_list.append(self.b_split[max_value])
+                self.del_list_value(self.max_min,self.b_split,max_value)
+                print "Single"
+            else:
+                self.success_list.append(self.b_split[max_value].replace('\n','')+' '+self.b_split[min_value]+'\n')
+                self.del_list_value(self.max_min,self.b_split,max_value)
+                min_value=self.max_min.index(min(self.max_min))
+                self.del_list_value(self.max_min,self.b_split,min_value)
+                print "Double"
+            min_value=self.max_min.index(min(self.max_min))
         
+        print 'list max_seat:  %s min_seat:  %s' % (max_value,min_value)
+        self.success_list.append(self.b_split[0])
+        return self.success_list
+
+
+def main(widenum, textdir):
+    path = raw_input('save_filename:')
+    if widenum == '':
+        widenum = 35
+    asg = Average_sorting(widenum, textdir)
+    success_list = asg.best_value()
+    import rw
+    rw.handle(success_list,path)
 
 
 if __name__ == '__main__':
     textdir = 'd:/name.txt'
-    main(textdir)
+    main(27, textdir)
