@@ -25,10 +25,10 @@ if __name__ == '__main__':
 	if n=='6':
 		success_list = Average_sorting.wide_line(raw_input('wide_line:'),'D:/name.txt')
 		path = raw_input('save_filename:')
-		wlist(success_list,path,True)
+		Text_handle.wlist(success_list,path,True)
 	elif n=='6.1':
 		group_list,linesum = Average_sorting.group_line(raw_input('group_line:'),f)
-		wlist(group_list,'group_%d.txt' % linesum,True)
+		Text_handle.wlist(group_list,'group_%d.txt' % linesum,True)
 
 	#==================Html_handle==============================
 	import Html_handle
