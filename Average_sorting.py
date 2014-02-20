@@ -1,4 +1,8 @@
 # coding: utf-8
+'''======import_list========
+    
+    Text_handle'''
+import Text_handle
 
 class Average_sorting(object):
     """docstring for Average_sorting"""
@@ -25,16 +29,18 @@ class Average_sorting(object):
     def merger_group(self):
         result = ''
         textlines = open(self.textdir,'r').readlines()
+        textlines = Text_handle.del_BL(textlines)
+        textlines = Text_handle.judge_key(textlines)
         for i in xrange(0,len(textlines)):
             if len(textlines[i])>self.widenum:
                     self.b_split.append(textlines[i])
             else:
-                if len(result + textlines[i].replace('\n','') + ' ')>self.widenum:
-                    self.success_list.append(result+'\n')
+                if len('%s%s ' % (result, textlines[i].replace('\n','')))>self.widenum:
+                    self.success_list.append('%s\n' % result)
                     result = '' # Empty result
-                    result = textlines[i].replace('\n','') + ' ' # The remaining save to results
+                    result = '%s ' % textlines[i].replace('\n','') # The remaining save to results
                 else:
-                    result = result + textlines[i].replace('\n','') + ' '
+                    result = '%s%s ' % (result, textlines[i].replace('\n',''))
 
     def best_value(self):
         self.merger_group()
@@ -73,16 +79,40 @@ class Average_sorting(object):
         return self.success_list
 
 
-def main(widenum, textdir):
-    path = raw_input('save_filename:')
-    if widenum == '':
-        widenum = 35
+
+def wide_line(widenum, textdir):
+    '''You want lines width.
+
+        widenum = lines width(Word-wide)
+        textdir = read files path'''
+    if widenum == '': widenum = 35
     asg = Average_sorting(widenum, textdir)
     success_list = asg.best_value()
-    import rw
-    rw.handle(success_list,path)
+    return success_list
+
+def group_line(linesum,files):
+    '''You want to merge several lines
+
+            linesum = several lines?
+            files = a list'''
+    n=0
+    group_list = []
+    files = Text_handle.del_BL(files)
+    files = Text_handle.judge_key(files)
+    file_lines = len(files)
+    while file_lines>linesum:
+        line = ''
+        for x in xrange(0,linesum):
+            line = '%s%s ' % (line,files[n].replace('\n',''))
+            n+=1
+        group_list.append('%s\n' % line)
+        file_lines -= linesum
+    group_list.append(files[n])
+    return group_list,linesum
 
 
 if __name__ == '__main__':
     textdir = 'd:/name.txt'
-    main(35, textdir)
+    success_list = wide_line(35, textdir)
+    path = raw_input('save_filename:')
+    Text_handle.wlist(success_list,path)
